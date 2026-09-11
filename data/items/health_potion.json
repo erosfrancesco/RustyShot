@@ -1,0 +1,9 @@
+{
+  "id": "health_potion",
+  "name": "Health Potion",
+  "type": "consumable",
+  "rarity": "common",
+  "stackable": true,
+  "maxStack": 20,
+  "healAmount": 25
+}

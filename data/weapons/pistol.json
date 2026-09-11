@@ -1,0 +1,12 @@
+{
+  "id": "pistol",
+  "name": "Pistol",
+  "type": "weapon",
+  "damage": 25,
+  "fireRate": 0.5,
+  "projectileSpeed": 50,
+  "projectileLifetime": 2.0,
+  "magazineSize": 12,
+  "reloadTime": 1.5,
+  "spread": 0.02
+}

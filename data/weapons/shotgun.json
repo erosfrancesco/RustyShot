@@ -1,0 +1,13 @@
+{
+  "id": "shotgun",
+  "name": "Shotgun",
+  "type": "weapon",
+  "damage": 15,
+  "fireRate": 0.8,
+  "projectileSpeed": 40,
+  "projectileLifetime": 1.5,
+  "magazineSize": 6,
+  "reloadTime": 2.5,
+  "spread": 0.15,
+  "pellets": 8
+}

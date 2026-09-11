@@ -1,0 +1,10 @@
+{
+  "id": "ammo_box",
+  "name": "Ammo Box",
+  "type": "consumable",
+  "rarity": "common",
+  "stackable": true,
+  "maxStack": 10,
+  "ammoType": "9mm",
+  "ammoAmount": 30
+}

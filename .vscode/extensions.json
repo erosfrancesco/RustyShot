@@ -1,0 +1,9 @@
+{
+  "recommendations": [
+    "ms-vscode.vscode-typescript-next",
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "babylonjs.babylonjs-editor",
+    "ms-vscode.js-debug"
+  ]
+}

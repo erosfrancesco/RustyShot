@@ -1,0 +1,13 @@
+{
+  "id": "skeleton",
+  "name": "Skeleton",
+  "maxHealth": 50,
+  "speed": 2.5,
+  "damage": 10,
+  "attackCooldown": 1.2,
+  "range": 1.5,
+  "lootTable": [
+    { "itemId": "bone_shard", "weight": 0.8 },
+    { "itemId": "health_potion", "weight": 0.2 }
+  ]
+}
