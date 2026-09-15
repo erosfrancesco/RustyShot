@@ -1,0 +1,11 @@
+{
+  "id": "default_nook",
+  "label": "Default Book Nook",
+  "category": "nook",
+  "woodType": "oak",
+  "shelfCount": 3,
+  "width": 1.2,
+  "depth": 0.4,
+  "height": 1.8,
+  "includesLighting": true
+}

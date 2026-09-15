@@ -1,0 +1,9 @@
+{
+  "id": "hardcover_book",
+  "label": "Hardcover Book",
+  "category": "book",
+  "color": "#8B4513",
+  "spineWidth": 0.05,
+  "height": 0.22,
+  "depth": 0.18
+}

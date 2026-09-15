@@ -1,0 +1,69 @@
+{
+  "version": "5.0.0",
+  "name": "Asset Manager",
+  "description": "Scene for creating, previewing, and exporting asset presets.",
+  "clearColor": [0.1, 0.1, 0.1, 1.0],
+  "environmentPath": "",
+  "camera": {
+    "name": "editorCamera",
+    "type": "ArcRotateCamera",
+    "position": [0, 8, -12],
+    "target": [0, 0, 0],
+    "alpha": -Math.PI / 2,
+    "beta": Math.PI / 3,
+    "radius": 15,
+    "lowerRadiusLimit": 2,
+    "upperRadiusLimit": 50,
+    "lowerBetaLimit": 0.1,
+    "upperBetaLimit": Math.PI / 2 - 0.1
+  },
+  "lights": [
+    {
+      "name": "ambientLight",
+      "type": "HemisphericLight",
+      "direction": [0, 1, 0],
+      "intensity": 0.6
+    },
+    {
+      "name": "directionalLight",
+      "type": "DirectionalLight",
+      "direction": [-1, -2, -1],
+      "intensity": 0.8
+    }
+  ],
+  "meshes": [
+    {
+      "name": "ground",
+      "type": "Ground",
+      "width": 30,
+      "height": 30,
+      "subdivisions": 2
+    },
+    {
+      "name": "previewPedestal",
+      "type": "Cylinder",
+      "height": 0.2,
+      "diameterTop": 1.2,
+      "diameterBottom": 1.4
+    },
+    {
+      "name": "gridHelper",
+      "type": "LinesMesh",
+      "points": "generated_grid_30x30"
+    }
+  ],
+  "metadata": {
+    "presets": {
+      "nooks": {},
+      "shelves": {},
+      "books": {},
+      "lighting": {},
+      "decor": {},
+      "trim": {}
+    },
+    "selectedPreset": null
+  },
+  "scripts": {
+    "entryPoint": "tools/AssetPresetManager.ts"
+  }
+}

@@ -20,6 +20,6 @@
     },
     "types": ["vitest/globals"]
   },
-  "include": ["src/**/*", "tests/**/*", "vite.config.ts"],
+  "include": ["src/**/*", "tests/**/*", "tools/**/*", "vite.config.ts"],
   "exclude": ["dist", "node_modules"]
 }

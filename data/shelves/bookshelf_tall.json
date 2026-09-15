@@ -1,0 +1,10 @@
+{
+  "id": "bookshelf_tall",
+  "label": "Tall Bookshelf",
+  "category": "shelf",
+  "woodType": "pine",
+  "shelfCount": 6,
+  "width": 1.0,
+  "depth": 0.35,
+  "height": 2.2
+}

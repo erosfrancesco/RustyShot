@@ -1,0 +1,118 @@
+[
+  {
+    "id": "default_nook",
+    "label": "Default Book Nook",
+    "category": "nook",
+    "tags": ["default", "starter"],
+    "glbPath": "/assets/nooks/default_nook.glb",
+    "thumbnail": "/assets/nooks/default_nook_thumb.png",
+    "properties": {
+      "woodType": "oak",
+      "shelfCount": 3,
+      "width": 1.2,
+      "depth": 0.4,
+      "height": 1.8,
+      "includesLighting": true
+    }
+  },
+  {
+    "id": "corner_reading_nook",
+    "label": "Corner Reading Nook",
+    "category": "nook",
+    "tags": ["corner", "cozy", "reading"],
+    "glbPath": "/assets/nooks/corner_reading_nook.glb",
+    "thumbnail": "/assets/nooks/corner_reading_nook_thumb.png",
+    "properties": {
+      "woodType": "pine",
+      "shelfCount": 4,
+      "width": 1.5,
+      "depth": 0.5,
+      "height": 2.0,
+      "includesCushion": true,
+      "includesLamp": true
+    }
+  },
+  {
+    "id": "bookshelf_small",
+    "label": "Small Bookshelf",
+    "category": "shelf",
+    "tags": ["bookshelf", "compact"],
+    "glbPath": "/assets/shelves/bookshelf_small.glb",
+    "thumbnail": "/assets/shelves/bookshelf_small_thumb.png",
+    "properties": {
+      "woodType": "oak",
+      "shelfCount": 4,
+      "width": 0.8,
+      "depth": 0.3,
+      "height": 1.4
+    }
+  },
+  {
+    "id": "bookshelf_tall",
+    "label": "Tall Bookshelf",
+    "category": "shelf",
+    "tags": ["bookshelf", "tall"],
+    "glbPath": "/assets/shelves/bookshelf_tall.glb",
+    "thumbnail": "/assets/shelves/bookshelf_tall_thumb.png",
+    "properties": {
+      "woodType": "pine",
+      "shelfCount": 6,
+      "width": 1.0,
+      "depth": 0.35,
+      "height": 2.2
+    }
+  },
+  {
+    "id": "hardcover_book",
+    "label": "Hardcover Book",
+    "category": "book",
+    "tags": ["book", "hardcover"],
+    "glbPath": "/assets/books/hardcover_book.glb",
+    "thumbnail": "/assets/books/hardcover_book_thumb.png",
+    "properties": {
+      "color": "#8B4513",
+      "spineWidth": 0.05,
+      "height": 0.22,
+      "depth": 0.18
+    }
+  },
+  {
+    "id": "table_lamp",
+    "label": "Table Lamp",
+    "category": "lighting",
+    "tags": ["lamp", "warm"],
+    "glbPath": "/assets/lighting/table_lamp.glb",
+    "thumbnail": "/assets/lighting/table_lamp_thumb.png",
+    "properties": {
+      "lightColor": "#FFE4B5",
+      "intensity": 0.8,
+      "shadeMaterial": "fabric"
+    }
+  },
+  {
+    "id": "cushion_round",
+    "label": "Round Cushion",
+    "category": "decor",
+    "tags": ["cushion", "seating"],
+    "glbPath": "/assets/decor/cushion.glb",
+    "thumbnail": "/assets/decor/cushion_thumb.png",
+    "properties": {
+      "fabric": "linen",
+      "diameter": 0.45,
+      "thickness": 0.1
+    }
+  },
+  {
+    "id": "baseboard_trim",
+    "label": "Baseboard Trim",
+    "category": "trim",
+    "tags": ["trim", "baseboard"],
+    "glbPath": "/assets/trim/baseboard.glb",
+    "thumbnail": "/assets/trim/baseboard_thumb.png",
+    "properties": {
+      "woodType": "oak",
+      "height": 0.15,
+      "thickness": 0.02
+    }
+  }
+]

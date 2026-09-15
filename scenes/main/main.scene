@@ -1,0 +1,52 @@
+{
+  "version": "5.0.0",
+  "name": "NookWorld Viewer",
+  "description": "Primary scene for previewing wood book nook presets.",
+  "clearColor": [0.02, 0.02, 0.03, 1.0],
+  "environmentPath": "",
+  "camera": {
+    "name": "nookCamera",
+    "type": "ArcRotateCamera",
+    "position": [2, 2.5, -3],
+    "target": [0, 0.8, 0],
+    "alpha": Math.PI / 4,
+    "beta": Math.PI / 3,
+    "radius": 4,
+    "lowerRadiusLimit": 0.5,
+    "upperRadiusLimit": 12
+  },
+  "lights": [
+    {
+      "name": "ambientLight",
+      "type": "HemisphericLight",
+      "direction": [0, 1, 0],
+      "intensity": 0.5
+    },
+    {
+      "name": "warmPointLight",
+      "type": "PointLight",
+      "position": [0, 2.2, 0],
+      "intensity": 0.6,
+      "diffuse": [1, 0.9, 0.7]
+    }
+  ],
+  "meshes": [
+    {
+      "name": "roomBase",
+      "type": "Box",
+      "width": 4,
+      "height": 2.4,
+      "depth": 1.2
+    },
+    {
+      "name": "floor",
+      "type": "Ground",
+      "width": 3,
+      "height": 1
+    }
+  ],
+  "metadata": {
+    "app": "NookWorld",
+    "nookPreset": "default_nook"
+  }
+}

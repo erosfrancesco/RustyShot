@@ -1,6 +1,6 @@
-# RustyShot
+# NookWorld
 
-Top-down RPG/shooter built with [Babylon.js](https://www.babylonjs.com/) and TypeScript.
+3D book-nook preset manager and viewer built with [Babylon.js](https://www.babylonjs.com/) and TypeScript.
 
 ## Stack
 
@@ -9,8 +9,7 @@ Top-down RPG/shooter built with [Babylon.js](https://www.babylonjs.com/) and Typ
 - **Build:** Vite
 - **Scene Editor:** Babylon.js Editor
 - **3D Assets:** Blender (GLB format)
-- **2D Assets:** LibreSprite (PNG format)
-- **AI Runtime:** OpenCode + Ollama
+- **2D Assets:** LibreSprite / textures (PNG format)
 - **Versioning:** Git + Git LFS
 - **CI/CD:** GitHub Actions
 - **Tests:** Vitest
@@ -43,23 +42,26 @@ npm run dev
 ```
 ├── .github/workflows/   CI/CD pipeline
 ├── .vscode/             VS Code settings
-├── assets/              Source assets (characters, weapons, textures, audio)
+├── assets/              Source 3D/2D assets
 ├── scenes/              Babylon Editor scenes
-├── data/                Data-driven game definitions
+│   ├── asset-manager/   Asset preset editor scene
+│   ├── main/            Main viewer scene
+│   └── test/            Isolated test scene
+├── data/                Data-driven preset definitions
 ├── src/
 │   ├── core/            Game, GameState, Events
-│   ├── entities/        Player, Enemy, Projectile, Pickup
+│   ├── entities/        Scene entities
 │   ├── components/      Reusable entity components
-│   ├── combat/          Combat, Damage, Weapons, HitDetection
+│   ├── combat/          Hit detection / interaction helpers
 │   ├── physics/         PhysicsWorld, CollisionLayers
 │   ├── ai/              AIController, StateMachine, behaviors
 │   ├── animation/       AnimationController
-│   ├── assets/          AssetManager, AssetRegistry
-│   ├── rpg/             Stats, Inventory, Equipment, Loot
-│   ├── ui/              Game UI
+│   ├── assets/          AssetManager, AssetRegistry, AssetPresets
+│   ├── ui/              Editor and runtime UI
 │   ├── utils/           EventEmitter
 │   └── main.ts          Entry point
 ├── tests/               Automated tests
+├── tools/               Asset preset tooling
 ├── AGENTS.md            AI agent project specification
 ├── package.json
 ├── tsconfig.json
@@ -70,19 +72,28 @@ npm run dev
 
 ## Architecture
 
-- **Composition over inheritance:** Entities are composed of reusable components rather than deep class hierarchies.
-- **Data-driven:** Weapons, enemies, items, and levels are defined in JSON under `data/`.
+- **Composition over inheritance:** Entities and preset objects are composed from reusable components.
+- **Data-driven:** Wood book nook presets are defined in JSON under `data/`.
 - **Event-driven:** Systems communicate via a typed event bus (`EventEmitter`).
 - **3D Assets:** Loaded via Babylon's `AssetContainer` and referenced through a typed `AssetRegistry`.
+
+## Focus
+
+NookWorld is centered on **wood book nook** presets and assets:
+
+- Bookshelf nooks
+- Reading corner layouts
+- Cozy wood-themed props and trim
+- Reusable preset metadata for fast scene assembly
 
 ## Rules
 
 - TypeScript strict mode.
 - No implicit `any`.
-- Gameplay logic stays out of scene files.
-- Weapons and enemies are data-driven.
+- Keep gameplay/scene logic out of asset definition files.
+- Keep nook presets data-driven.
 - GLB is the runtime 3D asset format.
-- Source Blender files are not modified by game code.
+- Source Blender files are not modified by app code.
 
 ## License
 

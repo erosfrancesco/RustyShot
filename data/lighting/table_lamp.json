@@ -1,0 +1,8 @@
+{
+  "id": "table_lamp",
+  "label": "Table Lamp",
+  "category": "lighting",
+  "lightColor": "#FFE4B5",
+  "intensity": 0.8,
+  "shadeMaterial": "fabric"
+}

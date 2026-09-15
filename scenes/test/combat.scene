@@ -1,0 +1,36 @@
+{
+  "version": "5.0.0",
+  "name": "NookWorld Test",
+  "description": "Isolated scene for testing nook preset loading and interaction.",
+  "clearColor": [0.03, 0.03, 0.04, 1.0],
+  "environmentPath": "",
+  "camera": {
+    "name": "arcRotateCamera",
+    "type": "ArcRotateCamera",
+    "position": [0, 2, -3],
+    "target": [0, 0.6, 0],
+    "alpha": Math.PI / 2,
+    "beta": Math.PI / 3,
+    "radius": 3.5
+  },
+  "lights": [
+    {
+      "name": "ambientLight",
+      "type": "HemisphericLight",
+      "direction": [0, 1, 0],
+      "intensity": 0.6
+    }
+  ],
+  "meshes": [
+    {
+      "name": "ground",
+      "type": "Ground",
+      "width": 4,
+      "height": 4
+    }
+  ],
+  "metadata": {
+    "app": "NookWorld",
+    "testMode": "nook-preset"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "id": "corner_reading_nook",
+  "label": "Corner Reading Nook",
+  "category": "nook",
+  "woodType": "pine",
+  "shelfCount": 4,
+  "width": 1.5,
+  "depth": 0.5,
+  "height": 2.0,
+  "includesCushion": true,
+  "includesLamp": true
+}

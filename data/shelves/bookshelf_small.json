@@ -1,0 +1,10 @@
+{
+  "id": "bookshelf_small",
+  "label": "Small Bookshelf",
+  "category": "shelf",
+  "woodType": "oak",
+  "shelfCount": 4,
+  "width": 0.8,
+  "depth": 0.3,
+  "height": 1.4
+}
