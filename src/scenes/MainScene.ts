@@ -1,11 +1,13 @@
 import { BaseScene } from '../core/Scene';
 import { Game } from '../core/Game';
-import { MeshBuilder, FreeCamera, Vector3, HemisphericLight, PointLight, Color3, Color4 } from '@babylonjs/core';
+import { MeshBuilder, FreeCamera, Vector3, HemisphericLight, PointLight, Color3, Color4, TransformNode } from '@babylonjs/core';
 import { GameEvents } from '../core/Events';
+import { SceneSwitcher } from '../ui/SceneSwitcher';
 
 /** Main nook viewer scene. */
 export class MainScene extends BaseScene {
-  private nookRoot?: any;
+  private nookRoot?: TransformNode;
+  private sceneSwitcher?: SceneSwitcher;
 
   constructor(game: Game) {
     super(game);
@@ -33,6 +35,8 @@ export class MainScene extends BaseScene {
       // React to game state changes if needed
     });
 
+    this.sceneSwitcher = new SceneSwitcher(this.game, this.scene);
+
     this.state = 'ready';
   }
 
@@ -48,6 +52,8 @@ export class MainScene extends BaseScene {
 
   onExit(): void {
     super.onExit();
+    this.sceneSwitcher?.dispose();
+    this.sceneSwitcher = undefined;
     if (this.nookRoot) {
       this.nookRoot.dispose();
       this.nookRoot = undefined;
