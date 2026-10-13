@@ -1,9 +1,12 @@
 import { BaseScene } from '../core/Scene';
 import { Game } from '../core/Game';
-import { MeshBuilder, FreeCamera, Vector3, HemisphericLight, DirectionalLight, Color4 } from '@babylonjs/core';
+import { MeshBuilder, FreeCamera, Vector3, HemisphericLight, DirectionalLight, Color4, Scene } from '@babylonjs/core';
+import { SceneSwitcher } from '../ui/SceneSwitcher';
 
 /** Asset manager editor scene for creating and previewing nook presets. */
 export class AssetManagerScene extends BaseScene {
+  private sceneSwitcher?: SceneSwitcher;
+  private switcherVisible = true;
 
   constructor(game: Game) {
     super(game);
@@ -28,7 +31,19 @@ export class AssetManagerScene extends BaseScene {
 
     MeshBuilder.CreateLines('gridHelper', { points: this.generateGridPoints(30, 1) }, this.scene);
 
+    this.setupInput();
+
     this.state = 'ready';
+  }
+
+  private setupInput(): void {
+    const scene = this.scene as Scene;
+    scene.onKeyboardObservable.add((kbInfo) => {
+      if (kbInfo.type === 1 && kbInfo.event.key === 'w') {
+        this.switcherVisible = !this.switcherVisible;
+        this.sceneSwitcher?.setVisible(this.switcherVisible);
+      }
+    });
   }
 
   private generateGridPoints(size: number, step: number): Vector3[] {
@@ -50,5 +65,13 @@ export class AssetManagerScene extends BaseScene {
   onEnter(): void {
     super.onEnter();
     this.scene.clearColor = new Color4(0.1, 0.1, 0.1, 1.0);
+    this.sceneSwitcher = new SceneSwitcher(this.game, this.scene);
+    this.sceneSwitcher.setVisible(this.switcherVisible);
+  }
+
+  onExit(): void {
+    super.onExit();
+    this.sceneSwitcher?.dispose();
+    this.sceneSwitcher = undefined;
   }
 }

@@ -207,6 +207,11 @@ export class Game {
     canvas.id = 'gameCanvas';
     document.getElementById('app')?.appendChild(canvas);
 
+    // Sync drawing buffer to CSS size
+    this.engine.resize();
+    // Focus canvas for keyboard input
+    canvas.focus();
+
     window.addEventListener('keydown', (ev: KeyboardEvent) => {
       if (ev.key === 'i') {
         if (this.scene.debugLayer.isVisible()) {

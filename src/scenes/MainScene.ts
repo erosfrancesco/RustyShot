@@ -1,6 +1,6 @@
 import { BaseScene } from '../core/Scene';
 import { Game } from '../core/Game';
-import { MeshBuilder, FreeCamera, Vector3, HemisphericLight, PointLight, Color3, Color4, TransformNode } from '@babylonjs/core';
+import { MeshBuilder, FreeCamera, Vector3, HemisphericLight, PointLight, Color3, Color4, TransformNode, Scene } from '@babylonjs/core';
 import { GameEvents } from '../core/Events';
 import { SceneSwitcher } from '../ui/SceneSwitcher';
 
@@ -8,6 +8,7 @@ import { SceneSwitcher } from '../ui/SceneSwitcher';
 export class MainScene extends BaseScene {
   private nookRoot?: TransformNode;
   private sceneSwitcher?: SceneSwitcher;
+  private switcherVisible = true;
 
   constructor(game: Game) {
     super(game);
@@ -35,9 +36,19 @@ export class MainScene extends BaseScene {
       // React to game state changes if needed
     });
 
-    this.sceneSwitcher = new SceneSwitcher(this.game, this.scene);
+    this.setupInput();
 
     this.state = 'ready';
+  }
+
+  private setupInput(): void {
+    const scene = this.scene as Scene;
+    scene.onKeyboardObservable.add((kbInfo) => {
+      if (kbInfo.type === 1 && kbInfo.event.key === 'w') { // Key down
+        this.switcherVisible = !this.switcherVisible;
+        this.sceneSwitcher?.setVisible(this.switcherVisible);
+      }
+    });
   }
 
   update(_deltaTime: number): void {
@@ -48,6 +59,8 @@ export class MainScene extends BaseScene {
   onEnter(): void {
     super.onEnter();
     this.scene.clearColor = new Color4(0.02, 0.02, 0.03, 1.0);
+    this.sceneSwitcher = new SceneSwitcher(this.game, this.scene);
+    this.sceneSwitcher.setVisible(this.switcherVisible);
   }
 
   onExit(): void {
