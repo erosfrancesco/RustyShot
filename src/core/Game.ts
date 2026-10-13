@@ -6,13 +6,12 @@ import { AssetManager } from '../assets/AssetManager';
 import { AssetRegistry } from '../assets/AssetRegistry';
 import { BaseScene } from './Scene';
 
-export type SceneType = 'main' | 'asset-manager' | 'test';
+export type SceneType = 'main' | 'asset-manager';
 
 /** Scene class constructors for dynamic HMR reloading. */
 interface SceneConstructors {
   MainScene: new (game: Game) => BaseScene;
   AssetManagerScene: new (game: Game) => BaseScene;
-  TestScene: new (game: Game) => BaseScene;
 }
 
 /** Central game orchestrator: engine, scenes, render loop, and subsystems. */
@@ -49,15 +48,13 @@ export class Game {
 
   /** Dynamically import scene classes for HMR support. */
   private async loadSceneConstructors(): Promise<void> {
-    const [MainSceneMod, AssetManagerSceneMod, TestSceneMod] = await Promise.all([
+    const [MainSceneMod, AssetManagerSceneMod] = await Promise.all([
       import('../scenes/main/MainScene'),
       import('../scenes/asset-manager/AssetManagerScene'),
-      import('../scenes/test/TestScene'),
     ]);
     this.sceneConstructors = {
       MainScene: MainSceneMod.MainScene,
       AssetManagerScene: AssetManagerSceneMod.AssetManagerScene,
-      TestScene: TestSceneMod.TestScene,
     };
   }
 
@@ -65,7 +62,6 @@ export class Game {
     if (!this.sceneConstructors) return;
     this.scenes.set('main', new this.sceneConstructors.MainScene(this));
     this.scenes.set('asset-manager', new this.sceneConstructors.AssetManagerScene(this));
-    this.scenes.set('test', new this.sceneConstructors.TestScene(this));
   }
 
   /** Update scene constructors from new module exports (called on HMR). */
@@ -107,7 +103,6 @@ export class Game {
     await Promise.all([
       this.scenes.get('main')?.setup(),
       this.scenes.get('asset-manager')?.setup(),
-      this.scenes.get('test')?.setup(),
     ]);
     await this.loadAssets();
   }
@@ -229,7 +224,6 @@ export class Game {
       }
       if (ev.key === '1') this.switchScene('main');
       if (ev.key === '2') this.switchScene('asset-manager');
-      if (ev.key === '3') this.switchScene('test');
     });
   }
 

@@ -27,7 +27,6 @@ export class SceneSwitcher {
     const scenes: { type: SceneType; label: string; shortcut: string }[] = [
       { type: 'main', label: 'Main Viewer', shortcut: '1' },
       { type: 'asset-manager', label: 'Asset Manager', shortcut: '2' },
-      { type: 'test', label: 'Test Scene', shortcut: '3' },
     ];
 
     for (const { type, label, shortcut } of scenes) {

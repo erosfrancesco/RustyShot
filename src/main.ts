@@ -26,10 +26,6 @@ if (import.meta.hot) {
     await game.updateSceneConstructors();
     await game.hotReload();
   });
-  import.meta.hot.accept('./scenes/test/TestScene', async () => {
-    await game.updateSceneConstructors();
-    await game.hotReload();
-  });
   import.meta.hot.dispose(() => {
     game?.dispose();
   });

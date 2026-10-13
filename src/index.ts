@@ -6,7 +6,6 @@ export { GameEvents, type GameEventMap } from './core/Events';
 export { BaseScene, type SceneState, type SceneType } from './core/Scene';
 export { MainScene } from './scenes/main/MainScene';
 export { AssetManagerScene } from './scenes/asset-manager/AssetManagerScene';
-export { TestScene } from './scenes/test/TestScene';
 export { AssetManager } from './assets/AssetManager';
 export { AssetRegistry } from './assets/AssetRegistry';
 export type { AssetPreset } from './assets/AssetPresets';

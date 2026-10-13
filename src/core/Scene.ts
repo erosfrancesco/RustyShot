@@ -2,7 +2,7 @@ import { Engine, Scene } from '@babylonjs/core';
 import { Game } from './Game';
 
 export type SceneState = 'loading' | 'ready' | 'active' | 'paused' | 'disposed';
-export type SceneType = 'main' | 'asset-manager' | 'test';
+export type SceneType = 'main' | 'asset-manager';
 
 /** Abstract base class for logical game scenes. */
 export abstract class BaseScene {
