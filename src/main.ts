@@ -1,16 +1,12 @@
-import "./style.css"
-import { Game } from "./core/Game"
-import { GameUI } from "./ui/main"
+import './style.css';
+import { Game } from './core/Game';
 
-const canvas = document.createElement("canvas")
-const game = new Game(canvas)
-
-const ui = new GameUI(game)
-ui.init()
+const canvas = document.createElement('canvas');
+const game = new Game(canvas);
 
 async function bootstrap(): Promise<void> {
-    await game.loadAssets()
-    game.start()
+  await game.initialize();
+  game.start();
 }
 
-bootstrap().catch(console.error)
+bootstrap().catch(console.error);

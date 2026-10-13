@@ -1,11 +1,4 @@
-import {
-  Engine,
-  Scene,
-  Vector3,
-  HemisphericLight,
-  FreeCamera,
-  MeshBuilder,
-} from '@babylonjs/core';
+import { Engine, Scene } from '@babylonjs/core';
 import { GameState } from './GameState';
 import { GameEvents, GameEventMap } from './Events';
 import { EventEmitter } from '../utils/EventEmitter';
@@ -16,8 +9,14 @@ import { DamageSystem } from '../combat/DamageSystem';
 import { WeaponSystem } from '../combat/WeaponSystem';
 import { AnimationController } from '../animation/AnimationController';
 import { PlayerRPG } from '../rpg/PlayerRPG';
+import { BaseScene } from './Scene';
+import { MainScene } from '../scenes/MainScene';
+import { AssetManagerScene } from '../scenes/AssetManagerScene';
+import { TestScene } from '../scenes/TestScene';
 
-/** Central game orchestrator: engine, scene, render loop, and subsystems. */
+export type SceneType = 'main' | 'asset-manager' | 'test';
+
+/** Central game orchestrator: engine, scenes, render loop, and subsystems. */
 export class Game {
   private readonly engine: Engine;
   private readonly scene: Scene;
@@ -33,6 +32,10 @@ export class Game {
   private readonly animationController: AnimationController;
   private readonly playerRPG: PlayerRPG;
 
+  private readonly scenes = new Map<SceneType, BaseScene>();
+  private activeScene: BaseScene | null = null;
+  private pendingScene: SceneType | null = null;
+
   constructor(canvas: HTMLCanvasElement) {
     this.engine = new Engine(canvas, true, { preserveDrawingBuffer: true, stencil: true });
     this.scene = new Scene(this.engine);
@@ -45,7 +48,10 @@ export class Game {
     this.animationController = new AnimationController(this.scene);
     this.playerRPG = new PlayerRPG(this);
 
-    this.setupScene();
+    this.scenes.set('main', new MainScene(this));
+    this.scenes.set('asset-manager', new AssetManagerScene(this));
+    this.scenes.set('test', new TestScene(this));
+
     this.setupResize(canvas);
   }
 
@@ -89,6 +95,23 @@ export class Game {
     return this.playerRPG;
   }
 
+  getActiveScene(): BaseScene | null {
+    return this.activeScene;
+  }
+
+  getSceneInstance(type: SceneType): BaseScene | undefined {
+    return this.scenes.get(type);
+  }
+
+  async initialize(): Promise<void> {
+    await Promise.all([
+      this.scenes.get('main')?.setup(),
+      this.scenes.get('asset-manager')?.setup(),
+      this.scenes.get('test')?.setup(),
+    ]);
+    await this.loadAssets();
+  }
+
   start(): void {
     if (this.running) return;
     this.running = true;
@@ -101,6 +124,7 @@ export class Game {
       this.scene.render();
     });
     this.setState(GameState.Playing);
+    this.switchScene('main');
   }
 
   stop(): void {
@@ -117,24 +141,41 @@ export class Game {
 
   dispose(): void {
     this.stop();
+    this.activeScene?.dispose();
     this.scene.dispose();
     this.engine.dispose();
     this.eventBus.removeAll();
   }
 
-  private setupScene(): void {
-    const camera = new FreeCamera('playerCamera', new Vector3(0, 5, -10), this.scene);
-    camera.setTarget(Vector3.Zero());
-    const canvas = this.engine.getRenderingCanvas();
-    if (canvas) {
-      camera.attachControl(canvas, true);
+  switchScene(type: SceneType): void {
+    const nextScene = this.scenes.get(type);
+    if (!nextScene) {
+      console.warn(`Scene ${type} not found`);
+      return;
     }
-    camera.minZ = 0.1;
+    if (this.activeScene === nextScene) return;
 
-    new HemisphericLight('ambientLight', new Vector3(0, 1, 0), this.scene);
+    if (this.activeScene) {
+      this.activeScene.onExit();
+    }
+    this.activeScene = nextScene;
+    if (nextScene.isLoading()) {
+      this.pendingScene = type;
+    } else {
+      this.activeScene.onEnter();
+      this.pendingScene = null;
+    }
+    this.eventBus.emit(GameEvents.StateChange, { from: this.activeScene.getState(), to: 'active' });
+  }
 
-    MeshBuilder.CreateGround('ground', { width: 20, height: 20 }, this.scene);
-    MeshBuilder.CreateBox('playerMarker', { size: 0.5 }, this.scene);
+  private setupResize(canvas: HTMLCanvasElement): void {
+    window.addEventListener('resize', () => {
+      this.engine.resize();
+    });
+    canvas.style.width = '100%';
+    canvas.style.height = '100%';
+    canvas.id = 'gameCanvas';
+    document.getElementById('app')?.appendChild(canvas);
 
     window.addEventListener('keydown', (ev: KeyboardEvent) => {
       if (ev.key === 'i') {
@@ -151,17 +192,10 @@ export class Game {
           this.start();
         }
       }
+      if (ev.key === '1') this.switchScene('main');
+      if (ev.key === '2') this.switchScene('asset-manager');
+      if (ev.key === '3') this.switchScene('test');
     });
-  }
-
-  private setupResize(canvas: HTMLCanvasElement): void {
-    window.addEventListener('resize', () => {
-      this.engine.resize();
-    });
-    canvas.style.width = '100%';
-    canvas.style.height = '100%';
-    canvas.id = 'gameCanvas';
-    document.getElementById('app')?.appendChild(canvas);
   }
 
   private setState(next: GameState): void {
@@ -172,8 +206,16 @@ export class Game {
 
   private update(deltaTime: number): void {
     if (this.state !== GameState.Playing) return;
+
+    if (this.pendingScene && this.activeScene?.isLoading() === false) {
+      this.activeScene.onEnter();
+      this.pendingScene = null;
+    }
+
     this.combatSystem.update(deltaTime);
     this.damageSystem.update(deltaTime);
     this.weaponSystem.update(deltaTime);
+
+    this.activeScene?.update(deltaTime);
   }
 }
