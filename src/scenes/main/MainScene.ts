@@ -1,5 +1,5 @@
-import { BaseScene } from "../core/Scene"
-import { Game } from "../core/Game"
+import { BaseScene } from "../../core/Scene"
+import { Game } from "../../core/Game"
 import {
     MeshBuilder,
     FreeCamera,
@@ -10,9 +10,9 @@ import {
     Color4,
     TransformNode,
 } from "@babylonjs/core"
-import { GameEvents } from "../core/Events"
-import { SceneSwitcher } from "../ui/SceneSwitcher"
-import { attachSceneSwitcherToggle } from "../utils/sceneSwitcherToggle"
+import { GameEvents } from "../../core/Events"
+import { SceneSwitcher } from "../../ui/SceneSwitcher"
+import { attachSceneSwitcherToggle } from "../../utils/sceneSwitcherToggle"
 
 /** Main nook viewer scene. */
 export class MainScene extends BaseScene {

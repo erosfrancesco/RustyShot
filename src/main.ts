@@ -18,15 +18,15 @@ if (import.meta.hot) {
   import.meta.hot.accept('./core/Game', async () => {
     await game.hotReload();
   });
-  import.meta.hot.accept('./scenes/MainScene', async () => {
+  import.meta.hot.accept('./scenes/main/MainScene', async () => {
     await game.updateSceneConstructors();
     await game.hotReload();
   });
-  import.meta.hot.accept('./scenes/AssetManagerScene', async () => {
+  import.meta.hot.accept('./scenes/asset-manager/AssetManagerScene', async () => {
     await game.updateSceneConstructors();
     await game.hotReload();
   });
-  import.meta.hot.accept('./scenes/TestScene', async () => {
+  import.meta.hot.accept('./scenes/test/TestScene', async () => {
     await game.updateSceneConstructors();
     await game.hotReload();
   });

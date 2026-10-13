@@ -1,5 +1,5 @@
-import { BaseScene } from "../core/Scene"
-import { Game } from "../core/Game"
+import { BaseScene } from "../../core/Scene"
+import { Game } from "../../core/Game"
 import {
     MeshBuilder,
     FreeCamera,
@@ -8,8 +8,8 @@ import {
     DirectionalLight,
     Color4,
 } from "@babylonjs/core"
-import { SceneSwitcher } from "../ui/SceneSwitcher"
-import { attachSceneSwitcherToggle } from "../utils/sceneSwitcherToggle"
+import { SceneSwitcher } from "../../ui/SceneSwitcher"
+import { attachSceneSwitcherToggle } from "../../utils/sceneSwitcherToggle"
 
 /** Asset manager editor scene for creating and previewing nook presets. */
 export class AssetManagerScene extends BaseScene {

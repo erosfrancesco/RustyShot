@@ -1,5 +1,5 @@
-import { BaseScene } from "../core/Scene"
-import { Game } from "../core/Game"
+import { BaseScene } from "../../core/Scene"
+import { Game } from "../../core/Game"
 import {
     MeshBuilder,
     ArcRotateCamera,
@@ -7,8 +7,8 @@ import {
     HemisphericLight,
     Color4,
 } from "@babylonjs/core"
-import { SceneSwitcher } from "../ui/SceneSwitcher"
-import { attachSceneSwitcherToggle } from "../utils/sceneSwitcherToggle"
+import { SceneSwitcher } from "../../ui/SceneSwitcher"
+import { attachSceneSwitcherToggle } from "../../utils/sceneSwitcherToggle"
 
 /** Isolated test scene for debugging nook presets. */
 export class TestScene extends BaseScene {

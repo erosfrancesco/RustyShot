@@ -4,11 +4,6 @@ import { GameEvents, GameEventMap } from './Events';
 import { EventEmitter } from '../utils/EventEmitter';
 import { AssetManager } from '../assets/AssetManager';
 import { AssetRegistry } from '../assets/AssetRegistry';
-import { CombatSystem } from '../combat/CombatSystem';
-import { DamageSystem } from '../combat/DamageSystem';
-import { WeaponSystem } from '../combat/WeaponSystem';
-import { AnimationController } from '../animation/AnimationController';
-import { PlayerRPG } from '../rpg/PlayerRPG';
 import { BaseScene } from './Scene';
 
 export type SceneType = 'main' | 'asset-manager' | 'test';
@@ -30,12 +25,6 @@ export class Game {
   private lastTime = 0;
   private assetManager: AssetManager;
 
-  private readonly combatSystem: CombatSystem;
-  private readonly damageSystem: DamageSystem;
-  private readonly weaponSystem: WeaponSystem;
-  private readonly animationController: AnimationController;
-  private readonly playerRPG: PlayerRPG;
-
   private readonly scenes = new Map<SceneType, BaseScene>();
   private activeScene: BaseScene | null = null;
   private pendingScene: SceneType | null = null;
@@ -43,17 +32,13 @@ export class Game {
   /** Scene constructors - updated on HMR. */
   private sceneConstructors!: SceneConstructors;
 
+  private initPromise: Promise<void>;
+
   constructor(canvas: HTMLCanvasElement) {
     this.engine = new Engine(canvas, true, { preserveDrawingBuffer: true, stencil: true });
     this.scene = new Scene(this.engine);
     this.eventBus = new EventEmitter<GameEventMap>();
     this.assetManager = new AssetManager(this.scene);
-
-    this.combatSystem = new CombatSystem(this);
-    this.damageSystem = new DamageSystem(this);
-    this.weaponSystem = new WeaponSystem(this);
-    this.animationController = new AnimationController(this.scene);
-    this.playerRPG = new PlayerRPG(this);
 
     // Load initial scene constructors
     this.initPromise = this.loadSceneConstructors().then(() => {
@@ -62,14 +47,12 @@ export class Game {
     });
   }
 
-  private initPromise: Promise<void>;
-
   /** Dynamically import scene classes for HMR support. */
   private async loadSceneConstructors(): Promise<void> {
     const [MainSceneMod, AssetManagerSceneMod, TestSceneMod] = await Promise.all([
-      import('../scenes/MainScene'),
-      import('../scenes/AssetManagerScene'),
-      import('../scenes/TestScene'),
+      import('../scenes/main/MainScene'),
+      import('../scenes/asset-manager/AssetManagerScene'),
+      import('../scenes/test/TestScene'),
     ]);
     this.sceneConstructors = {
       MainScene: MainSceneMod.MainScene,
@@ -111,26 +94,6 @@ export class Game {
     return this.state;
   }
 
-  getCombatSystem(): CombatSystem {
-    return this.combatSystem;
-  }
-
-  getDamageSystem(): DamageSystem {
-    return this.damageSystem;
-  }
-
-  getWeaponSystem(): WeaponSystem {
-    return this.weaponSystem;
-  }
-
-  getAnimationController(): AnimationController {
-    return this.animationController;
-  }
-
-  getPlayerRPG(): PlayerRPG {
-    return this.playerRPG;
-  }
-
   getActiveScene(): BaseScene | null {
     return this.activeScene;
   }
@@ -159,7 +122,7 @@ export class Game {
 
     // Recreate scene with same engine
     this.scene = new Scene(this.engine);
-    
+
     // Recreate asset manager with new scene
     this.assetManager = new AssetManager(this.scene);
 
@@ -283,10 +246,6 @@ export class Game {
       this.activeScene.onEnter();
       this.pendingScene = null;
     }
-
-    this.combatSystem.update(deltaTime);
-    this.damageSystem.update(deltaTime);
-    this.weaponSystem.update(deltaTime);
 
     this.activeScene?.update(deltaTime);
   }
