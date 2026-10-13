@@ -9,16 +9,16 @@ import {
     Color3,
     Color4,
     TransformNode,
-    Scene,
 } from "@babylonjs/core"
 import { GameEvents } from "../core/Events"
 import { SceneSwitcher } from "../ui/SceneSwitcher"
+import { attachSceneSwitcherToggle } from "../utils/sceneSwitcherToggle"
 
 /** Main nook viewer scene. */
 export class MainScene extends BaseScene {
     private nookRoot?: TransformNode
     private sceneSwitcher?: SceneSwitcher
-    private switcherVisible = true
+    private disposeToggle?: () => void
 
     constructor(game: Game) {
         super(game)
@@ -59,19 +59,14 @@ export class MainScene extends BaseScene {
             // React to game state changes if needed
         })
 
-        this.setupInput()
+        this.disposeToggle = attachSceneSwitcherToggle(
+            this.scene,
+            this.game,
+            () => this.sceneSwitcher,
+            (s) => { this.sceneSwitcher = s; }
+        )
 
         this.state = "ready"
-    }
-
-    private setupInput(): void {
-        const scene = this.scene as Scene
-        scene.onKeyboardObservable.add(kbInfo => {
-            if (kbInfo.type === 1 && kbInfo.event.key === "w") {
-                this.switcherVisible = !this.switcherVisible
-                this.sceneSwitcher?.setVisible(this.switcherVisible)
-            }
-        })
     }
 
     update(_deltaTime: number): void {
@@ -81,14 +76,12 @@ export class MainScene extends BaseScene {
     onEnter(): void {
         super.onEnter()
         this.scene.clearColor = new Color4(0.02, 0.02, 0.03, 1.0)
-        this.sceneSwitcher = new SceneSwitcher(this.game, this.scene)
-        this.sceneSwitcher.setVisible(this.switcherVisible)
     }
 
     onExit(): void {
         super.onExit()
-        this.sceneSwitcher?.dispose()
-        this.sceneSwitcher = undefined
+        this.disposeToggle?.()
+        this.disposeToggle = undefined
         if (this.nookRoot) {
             this.nookRoot.dispose()
             this.nookRoot = undefined

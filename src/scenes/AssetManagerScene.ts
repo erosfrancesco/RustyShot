@@ -7,14 +7,14 @@ import {
     HemisphericLight,
     DirectionalLight,
     Color4,
-    Scene,
 } from "@babylonjs/core"
 import { SceneSwitcher } from "../ui/SceneSwitcher"
+import { attachSceneSwitcherToggle } from "../utils/sceneSwitcherToggle"
 
 /** Asset manager editor scene for creating and previewing nook presets. */
 export class AssetManagerScene extends BaseScene {
     private sceneSwitcher?: SceneSwitcher
-    private switcherVisible = true
+    private disposeToggle?: () => void
 
     constructor(game: Game) {
         super(game)
@@ -63,7 +63,12 @@ export class AssetManagerScene extends BaseScene {
             this.scene,
         )
 
-        this.setupInput()
+        this.disposeToggle = attachSceneSwitcherToggle(
+            this.scene,
+            this.game,
+            () => this.sceneSwitcher,
+            (s) => { this.sceneSwitcher = s; }
+        )
 
         this.state = "ready"
     }
@@ -79,31 +84,18 @@ export class AssetManagerScene extends BaseScene {
         return points
     }
 
-    private setupInput(): void {
-        const scene = this.scene as Scene
-        scene.onKeyboardObservable.add(kbInfo => {
-            if (kbInfo.type === 1 && kbInfo.event.key === "w") {
-                this.switcherVisible = !this.switcherVisible
-                this.sceneSwitcher?.setVisible(this.switcherVisible)
-            }
-        })
-    }
-
     update(_deltaTime: number): void {
         if (this.state !== "active") return
-        // Editor per-frame logic
     }
 
     onEnter(): void {
         super.onEnter()
         this.scene.clearColor = new Color4(0.1, 0.1, 0.1, 1.0)
-        this.sceneSwitcher = new SceneSwitcher(this.game, this.scene)
-        this.sceneSwitcher.setVisible(this.switcherVisible)
     }
 
     onExit(): void {
         super.onExit()
-        this.sceneSwitcher?.dispose()
-        this.sceneSwitcher = undefined
+        this.disposeToggle?.()
+        this.disposeToggle = undefined
     }
 }
