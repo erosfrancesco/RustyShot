@@ -6,6 +6,8 @@ let game: Game;
 
 async function bootstrap(): Promise<void> {
   game = new Game(canvas);
+  // Wait for scene constructors to load
+  await new Promise(resolve => setTimeout(resolve, 0));
   await game.initialize();
   game.start();
 }
@@ -17,12 +19,15 @@ if (import.meta.hot) {
     await game.hotReload();
   });
   import.meta.hot.accept('./scenes/MainScene', async () => {
+    await game.updateSceneConstructors();
     await game.hotReload();
   });
   import.meta.hot.accept('./scenes/AssetManagerScene', async () => {
+    await game.updateSceneConstructors();
     await game.hotReload();
   });
   import.meta.hot.accept('./scenes/TestScene', async () => {
+    await game.updateSceneConstructors();
     await game.hotReload();
   });
   import.meta.hot.dispose(() => {

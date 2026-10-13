@@ -10,21 +10,25 @@ import { WeaponSystem } from '../combat/WeaponSystem';
 import { AnimationController } from '../animation/AnimationController';
 import { PlayerRPG } from '../rpg/PlayerRPG';
 import { BaseScene } from './Scene';
-import { MainScene } from '../scenes/MainScene';
-import { AssetManagerScene } from '../scenes/AssetManagerScene';
-import { TestScene } from '../scenes/TestScene';
 
 export type SceneType = 'main' | 'asset-manager' | 'test';
+
+/** Scene class constructors for dynamic HMR reloading. */
+interface SceneConstructors {
+  MainScene: new (game: Game) => BaseScene;
+  AssetManagerScene: new (game: Game) => BaseScene;
+  TestScene: new (game: Game) => BaseScene;
+}
 
 /** Central game orchestrator: engine, scenes, render loop, and subsystems. */
 export class Game {
   private readonly engine: Engine;
-  private readonly scene: Scene;
+  private scene: Scene;
   private readonly eventBus: EventEmitter<GameEventMap>;
   private state: GameState = GameState.Loading;
   private running = false;
   private lastTime = 0;
-  private readonly assetManager: AssetManager;
+  private assetManager: AssetManager;
 
   private readonly combatSystem: CombatSystem;
   private readonly damageSystem: DamageSystem;
@@ -35,6 +39,9 @@ export class Game {
   private readonly scenes = new Map<SceneType, BaseScene>();
   private activeScene: BaseScene | null = null;
   private pendingScene: SceneType | null = null;
+
+  /** Scene constructors - updated on HMR. */
+  private sceneConstructors!: SceneConstructors;
 
   constructor(canvas: HTMLCanvasElement) {
     this.engine = new Engine(canvas, true, { preserveDrawingBuffer: true, stencil: true });
@@ -48,14 +55,40 @@ export class Game {
     this.animationController = new AnimationController(this.scene);
     this.playerRPG = new PlayerRPG(this);
 
-    this.createScenes();
-    this.setupResize(canvas);
+    // Load initial scene constructors
+    this.initPromise = this.loadSceneConstructors().then(() => {
+      this.createScenes();
+      this.setupResize(canvas);
+    });
+  }
+
+  private initPromise: Promise<void>;
+
+  /** Dynamically import scene classes for HMR support. */
+  private async loadSceneConstructors(): Promise<void> {
+    const [MainSceneMod, AssetManagerSceneMod, TestSceneMod] = await Promise.all([
+      import('../scenes/MainScene'),
+      import('../scenes/AssetManagerScene'),
+      import('../scenes/TestScene'),
+    ]);
+    this.sceneConstructors = {
+      MainScene: MainSceneMod.MainScene,
+      AssetManagerScene: AssetManagerSceneMod.AssetManagerScene,
+      TestScene: TestSceneMod.TestScene,
+    };
   }
 
   private createScenes(): void {
-    this.scenes.set('main', new MainScene(this));
-    this.scenes.set('asset-manager', new AssetManagerScene(this));
-    this.scenes.set('test', new TestScene(this));
+    if (!this.sceneConstructors) return;
+    this.scenes.set('main', new this.sceneConstructors.MainScene(this));
+    this.scenes.set('asset-manager', new this.sceneConstructors.AssetManagerScene(this));
+    this.scenes.set('test', new this.sceneConstructors.TestScene(this));
+  }
+
+  /** Update scene constructors from new module exports (called on HMR). */
+  async updateSceneConstructors(): Promise<void> {
+    await this.loadSceneConstructors();
+    this.createScenes();
   }
 
   getEngine(): Engine {
@@ -107,6 +140,7 @@ export class Game {
   }
 
   async initialize(): Promise<void> {
+    await this.initPromise;
     await Promise.all([
       this.scenes.get('main')?.setup(),
       this.scenes.get('asset-manager')?.setup(),
@@ -124,20 +158,23 @@ export class Game {
     this.scene.dispose();
 
     // Recreate scene with same engine
-    const newScene = new Scene(this.engine);
-    Object.assign(this, { scene: newScene });
+    this.scene = new Scene(this.engine);
     
     // Recreate asset manager with new scene
-    const newAssetManager = new AssetManager(newScene);
-    Object.assign(this, { assetManager: newAssetManager });
+    this.assetManager = new AssetManager(this.scene);
 
-    // Recreate scenes
+    // Recreate scenes (they will capture the new scene via game.getScene())
     this.scenes.clear();
     this.createScenes();
     this.activeScene = null;
     this.pendingScene = null;
 
     await this.initialize();
+
+    // Sync drawing buffer after reload
+    this.engine.resize();
+    // Focus canvas for keyboard input
+    this.engine.getRenderingCanvas()?.focus();
 
     if (wasRunning) this.start();
   }
