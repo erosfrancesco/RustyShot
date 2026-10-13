@@ -5,16 +5,14 @@ import {
     FreeCamera,
     Vector3,
     HemisphericLight,
-    PointLight,
-    Color3,
     Color4,
 } from "@babylonjs/core"
 import { GameEvents } from "../../core/Events"
 import { SceneSwitcher } from "../../ui/SceneSwitcher"
 import { createSceneSwitcherToggle } from "../../utils/sceneSwitcherToggle"
-import { BookNookRegistry, nookVariants } from "../../book-nook"
+import { BookNookRegistry } from "../../book-nook"
 
-/** Main nook viewer scene - demonstrates multiple nook variations. */
+/** Main nook viewer scene - displays the simple oak nook. */
 export class MainScene extends BaseScene {
     private nookRegistry?: BookNookRegistry
     private sceneSwitcher?: SceneSwitcher
@@ -27,33 +25,19 @@ export class MainScene extends BaseScene {
     async setup(): Promise<void> {
         const camera = new FreeCamera(
             "mainCamera",
-            new Vector3(0, 5, -10),
+            new Vector3(0, 3, -5),
             this.scene,
         )
-        camera.setTarget(Vector3.Zero())
+        camera.setTarget(new Vector3(0, 0.8, 0))
         const canvas = this.engine.getRenderingCanvas()
         if (canvas) {
             camera.attachControl(canvas, true)
         }
         camera.minZ = 0.1
 
-        new HemisphericLight("ambientLight", new Vector3(0, 1, 0), this.scene)
+        new HemisphericLight("ambientLight", new Vector3(0, 1, 0), this.scene).intensity = 0.2
 
-        const pointLight = new PointLight(
-            "warmPointLight",
-            new Vector3(0, 2.2, 0),
-            this.scene,
-        )
-        pointLight.diffuse = new Color3(1, 0.9, 0.7)
-        pointLight.intensity = 0.6
-
-        MeshBuilder.CreateBox(
-            "roomBase",
-            { width: 4, height: 2.4, depth: 1.2 },
-            this.scene,
-        )
-
-        MeshBuilder.CreateGround("floor", { width: 3, height: 1 }, this.scene)
+        MeshBuilder.CreateGround("floor", { width: 6, height: 4 }, this.scene)
 
         this.game.getEventBus().on(GameEvents.StateChange, () => {
             // React to game state changes if needed
@@ -70,14 +54,7 @@ export class MainScene extends BaseScene {
     private async createNookDisplay(): Promise<void> {
         if (!this.nookRegistry) return
 
-        const variants = Object.keys(nookVariants) as Array<keyof typeof nookVariants>
-        const spacing = 2.5
-
-        for (let i = 0; i < variants.length; i++) {
-            const variant = variants[i]
-            const x = (i - (variants.length - 1) / 2) * spacing
-            await this.nookRegistry.create(variant, new Vector3(x, 0, 0), variant)
-        }
+        await this.nookRegistry.create('simple-oak', Vector3.Zero(), 'simple-oak')
     }
 
     update(_deltaTime: number): void {

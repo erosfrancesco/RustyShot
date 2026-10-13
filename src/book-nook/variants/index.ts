@@ -62,8 +62,25 @@ export const enchantedForest: BookNookConfig = {
   ],
 };
 
+export const simpleOak: BookNookConfig = {
+  id: 'simple-oak',
+  shell: 'shell',
+  interior: 'interior',
+  palette: {
+    wood: '#A0522D',  // Oak/sienna
+    wall: '#F5F0E8',  // Light cream walls
+    accent: '#C9A84C', // Warm brass
+  },
+  lighting: {
+    color: '#FFF8E7',  // Warm white
+    intensity: 2.0,    // Bright single light from above
+  },
+  props: [],  // Empty inside
+};
+
 export const nookVariants = {
   'cozy-study': cozyStudy,
   'victorian-library': victorianLibrary,
   'enchanted-forest': enchantedForest,
+  'simple-oak': simpleOak,
 } as const;
