@@ -1,5 +1,6 @@
 import { Game } from '../core/Game';
 
+/** Coordinates weapon firing through the event bus. */
 export class CombatSystem {
   constructor(private readonly game: Game) {
     const bus = game.getEventBus();

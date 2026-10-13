@@ -1,10 +1,11 @@
-import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs';
-import { join } from 'node:path';
 import { EmptyPresetLibrary } from '../src/assets/AssetPresets';
 import type { AssetPreset, PresetLibrary } from '../src/assets/AssetPresets';
+import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs';
+import { join } from 'node:path';
 
 const PRESETS_PATH = join(process.cwd(), 'data', 'presets.json');
 
+/** Persists and queries the nook preset library from `data/presets.json`. */
 export class AssetPresetManager {
   private library: PresetLibrary = { ...EmptyPresetLibrary };
 

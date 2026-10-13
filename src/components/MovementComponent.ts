@@ -1,9 +1,11 @@
 import { IComponent } from '../entities/Entity';
 
+/** Movement speed component. */
 export interface MovementComponentConfig {
   readonly speed: number;
 }
 
+/** Movement speed component. */
 export class MovementComponent implements IComponent {
   readonly name = 'movement';
   private readonly speed: number;

@@ -1,3 +1,4 @@
+/** RPG stat block for character progression. */
 export interface StatBlock {
   readonly health: number;
   readonly mana: number;

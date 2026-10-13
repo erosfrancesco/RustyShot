@@ -2,12 +2,14 @@ import { Entity } from '../entities/Entity';
 import { StateMachine } from './StateMachine';
 import { IdleState } from './behaviors/EnemyStates';
 
+/** AI controller configuration. */
 export interface AIConfig {
   readonly speed: number;
   readonly chaseRange: number;
   readonly attackRange: number;
 }
 
+/** AI controller state context. */
 export interface AIContext {
   readonly speed: number;
   readonly chaseRange: number;
@@ -15,6 +17,7 @@ export interface AIContext {
   targetPosition: { x: number; z: number };
 }
 
+/** AI controller that runs a state machine for enemy entities. */
 export class AIController {
   private readonly stateMachine: StateMachine<AIContext>;
 

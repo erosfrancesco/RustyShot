@@ -1,9 +1,16 @@
-import { IComponent } from '../entities/Entity';
+/** Component interface for the entity composition system. */
+export interface IComponent {
+  readonly name: string;
+  update(deltaTime: number): void;
+  destroy(): void;
+}
 
+/** Tracks health, damage, and healing for an entity. */
 export interface HealthComponentConfig {
   readonly maxHealth: number;
 }
 
+/** Tracks health, damage, and healing for an entity. */
 export class HealthComponent implements IComponent {
   readonly name = 'health';
   private currentHealth: number;

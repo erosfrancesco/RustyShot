@@ -1,5 +1,6 @@
 import { Scene, Vector3 } from '@babylonjs/core';
 
+/** Camera raycast and sphere-collision helpers. */
 export class HitDetection {
   static raycastFromCamera(scene: Scene, distance = 1000): { point: Vector3; hit: boolean } {
     const ray = (scene as any).createPickingRay(0, 0, scene.activeCamera as any, scene, true) as any;

@@ -3,6 +3,7 @@ import { HealthComponent } from '../components/HealthComponent';
 import { MovementComponent } from '../components/MovementComponent';
 import { CombatComponent } from '../components/CombatComponent';
 
+/** Configuration for an enemy entity. */
 export interface EnemyConfig {
   readonly name: string;
   readonly maxHealth: number;
@@ -12,6 +13,7 @@ export interface EnemyConfig {
   readonly range: number;
 }
 
+/** Enemy entity driven by data-driven stats. */
 export class Enemy extends Entity {
   constructor(config: EnemyConfig) {
     super(config.name, ['enemy']);

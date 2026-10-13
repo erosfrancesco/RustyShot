@@ -1,10 +1,12 @@
 import { IComponent } from '../entities/Entity';
 import { Mesh } from '@babylonjs/core';
 
+/** Render component that owns a Babylon mesh. */
 export interface RenderComponentConfig {
   readonly mesh: Mesh;
 }
 
+/** Render component that owns a Babylon mesh. */
 export class RenderComponent implements IComponent {
   readonly name = 'render';
   private readonly mesh: Mesh;

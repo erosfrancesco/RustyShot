@@ -2,6 +2,7 @@ import { Scene, AbstractMesh } from '@babylonjs/core';
 import { Entity } from '../entities/Entity';
 import { CollisionLayers } from './CollisionLayers';
 
+/** Wraps Babylon physics initialization and entity collision registration. */
 export class PhysicsWorld {
   private enabled = false;
 
@@ -25,11 +26,11 @@ export class PhysicsWorld {
   }
 
   registerEntity(entity: Entity): void {
-    if (!this.enabled) {return;}
+    if (!this.enabled) return;
     const render = entity.getComponent<any>('render');
-    if (!render) {return;}
+    if (!render) return;
     const mesh = (render as any).mesh;
-    if (!mesh || !mesh.physicsImpostor) {return;}
+    if (!mesh || !mesh.physicsImpostor) return;
 
     if (entity.hasTag('player')) {
       this.setCollisionLayer(mesh, CollisionLayers.Player);

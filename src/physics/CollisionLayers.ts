@@ -1,3 +1,4 @@
+/** Collision layer bitmasks. */
 export const CollisionLayers = {
   Player: 1,
   Enemy: 2,

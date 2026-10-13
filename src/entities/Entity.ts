@@ -1,9 +1,11 @@
+/** Base entity: named, tagged, and composed of reusable components. */
 export interface IComponent {
   readonly name: string;
   update(deltaTime: number): void;
   destroy(): void;
 }
 
+/** Base entity: named, tagged, and composed of reusable components. */
 export class Entity {
   private readonly components = new Map<string, IComponent>();
   private active = true;
@@ -14,7 +16,7 @@ export class Entity {
   ) {}
 
   addComponent(key: string, component: IComponent): this {
-    if (!this.active) {return this;}
+    if (!this.active) return this;
     this.components.set(key, component);
     return this;
   }
@@ -28,7 +30,7 @@ export class Entity {
   }
 
   update(deltaTime: number): void {
-    if (!this.active) {return;}
+    if (!this.active) return;
     for (const component of this.components.values()) {
       component.update(deltaTime);
     }

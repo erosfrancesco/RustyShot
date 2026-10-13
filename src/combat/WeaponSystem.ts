@@ -1,5 +1,6 @@
 import { Game } from '../core/Game';
 
+/** Manages weapon definitions and firing behavior. */
 export interface WeaponDefinition {
   readonly id: string;
   readonly damage: number;
@@ -29,7 +30,7 @@ export class WeaponSystem {
 
   private handleFire(_sourceName: string, weaponId: string): void {
     const weapon = this.definitions.get(weaponId);
-    if (!weapon) {return;}
+    if (!weapon) return;
 
     this.game.getEventBus().emit('ProjectileHit', {
       projectile: 'projectile',

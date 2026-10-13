@@ -1,5 +1,6 @@
 import type { ItemDefinition } from './Inventory';
 
+/** Weighted loot table with roll support. */
 export interface LootEntry {
   readonly item: ItemDefinition;
   readonly weight: number;
@@ -16,13 +17,13 @@ export class Loot {
 
   roll(): LootEntry[] {
     const totalWeight = this.table.reduce((sum, entry) => sum + entry.weight, 0);
-    if (totalWeight === 0) {return [];}
+    if (totalWeight === 0) return [];
 
     const result: LootEntry[] = [];
     let remaining = totalWeight;
 
     for (const entry of this.table) {
-      if (remaining <= 0) {break;}
+      if (remaining <= 0) break;
       const roll = Math.random() * remaining;
       if (roll < entry.weight) {
         const quantity = Math.floor(Math.random() * (entry.maxQuantity - entry.minQuantity + 1)) + entry.minQuantity;

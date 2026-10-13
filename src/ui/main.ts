@@ -1,6 +1,7 @@
 import { Game } from '../core/Game';
 import { AdvancedDynamicTexture, TextBlock, Rectangle } from '@babylonjs/gui';
 
+/** Runtime HUD built with Babylon GUI. */
 export class GameUI {
   private advancedTexture?: AdvancedDynamicTexture;
 
@@ -13,7 +14,7 @@ export class GameUI {
   }
 
   private createHealthBar(): void {
-    if (!this.advancedTexture) {return;}
+    if (!this.advancedTexture) return;
 
     const rect = new Rectangle('healthBar');
     rect.width = '200px';
@@ -38,7 +39,7 @@ export class GameUI {
   }
 
   private createCrosshair(): void {
-    if (!this.advancedTexture) {return;}
+    if (!this.advancedTexture) return;
 
     const crosshair = new TextBlock('crosshair');
     crosshair.text = '+';

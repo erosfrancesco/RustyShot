@@ -2,11 +2,13 @@ import { Entity } from './Entity';
 import { HealthComponent } from '../components/HealthComponent';
 import { ProjectileComponent } from '../components/ProjectileComponent';
 
+/** Configuration for a projectile entity. */
 export interface ProjectileConfig {
   readonly lifetime: number;
   readonly damage: number;
 }
 
+/** Projectile entity with lifetime and damage. */
 export class Projectile extends Entity {
   constructor(config: ProjectileConfig) {
     super('projectile', ['projectile']);

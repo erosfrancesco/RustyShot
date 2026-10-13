@@ -1,3 +1,4 @@
+/** Typed registry of nook asset paths, organized by category. */
 export const AssetRegistry = {
   nooks: {
     default_nook: '/assets/nooks/default_nook.glb',

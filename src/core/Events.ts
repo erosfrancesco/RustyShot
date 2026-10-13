@@ -11,6 +11,7 @@ export interface GameEventPayloads extends Record<string, unknown> {
   'level:start': { levelId: string };
 }
 
+/** Canonical event names for the game event bus. */
 export const GameEvents = {
   StateChange: 'game:state-change',
   EntitySpawn: 'entity:spawn',
@@ -24,4 +25,5 @@ export const GameEvents = {
   LevelStart: 'level:start',
 } as const;
 
+/** Shorthand type alias for the game event payload map. */
 export type GameEventMap = GameEventPayloads;

@@ -39,7 +39,6 @@ export default [
       ...tseslint.configs.recommended.rules,
       ...prettier.rules,
       '@typescript-eslint/naming-convention': ['warn', { selector: 'variable', format: ['camelCase', 'PascalCase', 'UPPER_CASE'], leadingUnderscore: 'allow' }],
-      curly: ['warn', 'all'],
       eqeqeq: ['warn', 'always'],
       'no-throw-literal': 'warn',
       '@typescript-eslint/no-explicit-any': ['warn', { ignoreRestArgs: true, fixToUnknown: false }],

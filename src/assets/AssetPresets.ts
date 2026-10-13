@@ -13,6 +13,7 @@ export interface PresetLibrary {
   presets: AssetPreset[];
 }
 
+/** Empty library used as a default/fallback. */
 export const EmptyPresetLibrary: PresetLibrary = {
   version: '1.0.0',
   presets: [],

@@ -1,11 +1,13 @@
 import { IComponent } from '../entities/Entity';
 
+/** Combat stats: damage, cooldown, and range. */
 export interface CombatComponentConfig {
   readonly damage: number;
   readonly attackCooldown: number;
   readonly range: number;
 }
 
+/** Combat stats: damage, cooldown, and range. */
 export class CombatComponent implements IComponent {
   readonly name = 'combat';
   private readonly damage: number;

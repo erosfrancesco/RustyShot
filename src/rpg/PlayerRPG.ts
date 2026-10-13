@@ -3,6 +3,7 @@ import { Stats } from './Stats';
 import { Inventory } from './Inventory';
 import { Equipment } from './Equipment';
 
+/** Player RPG stats, inventory, and equipment manager. */
 export class PlayerRPG {
   private readonly stats: Stats;
   private readonly inventory: Inventory;

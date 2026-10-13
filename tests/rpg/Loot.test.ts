@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { Loot } from '../../src/rpg/Loot';
+import { Loot, type LootEntry } from '../../src/rpg/Loot';
 import type { ItemDefinition } from '../../src/rpg/Inventory';
 
 const commonItem: ItemDefinition = {
@@ -27,8 +27,8 @@ describe('Loot', () => {
     loot.addEntry({ item: rareItem, weight: 20, minQuantity: 1, maxQuantity: 1 });
 
     const results = loot.roll();
-    const hasCommon = results.some((r: any) => r.item.id === 'bone');
-    const hasRare = results.some((r: any) => r.item.id === 'gem');
+    const hasCommon = results.some((r: LootEntry) => r.item.id === 'bone');
+    const hasRare = results.some((r: LootEntry) => r.item.id === 'gem');
 
     expect(hasCommon || hasRare).toBe(true);
   });

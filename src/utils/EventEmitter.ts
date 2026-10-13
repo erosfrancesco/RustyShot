@@ -2,6 +2,7 @@ type Listener<T> = (payload: T) => void;
 
 export type EventMap = Record<string, unknown>;
 
+/** Type-safe event emitter keyed by event-name/payload map. */
 export class EventEmitter<EventMap extends Record<string, unknown>> {
   private readonly listeners = new Map<keyof EventMap, Set<Listener<unknown>>>();
 

@@ -2,6 +2,7 @@ import { Game } from '../core/Game';
 import { HealthComponent } from '../components/HealthComponent';
 import { Entity } from '../entities/Entity';
 
+/** Applies damage and healing, and emits death events. */
 export class DamageSystem {
   constructor(private readonly game: Game) {
     const bus = game.getEventBus();
@@ -17,10 +18,10 @@ export class DamageSystem {
 
   applyDamage(targetName: string, amount: number): void {
     const target = this.findEntity(targetName);
-    if (!target) {return;}
+    if (!target) return;
 
     const health = (target as Entity).getComponent('health') as HealthComponent | undefined;
-    if (!health) {return;}
+    if (!health) return;
 
     health.takeDamage(amount);
     this.game.getEventBus().emit('DamageDeal', {
@@ -36,10 +37,10 @@ export class DamageSystem {
 
   applyHeal(targetName: string, amount: number): void {
     const target = this.findEntity(targetName);
-    if (!target) {return;}
+    if (!target) return;
 
     const health = (target as Entity).getComponent('health') as HealthComponent | undefined;
-    if (!health) {return;}
+    if (!health) return;
 
     health.heal(amount);
     this.game.getEventBus().emit('DamageHeal', { target: targetName, amount });

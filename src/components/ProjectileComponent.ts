@@ -1,10 +1,12 @@
 import { IComponent } from '../entities/Entity';
 
+/** Projectile lifetime and damage component. */
 export interface ProjectileComponentConfig {
   readonly lifetime: number;
   readonly damage: number;
 }
 
+/** Projectile lifetime and damage component. */
 export class ProjectileComponent implements IComponent {
   readonly name = 'projectile';
   private readonly lifetime: number;

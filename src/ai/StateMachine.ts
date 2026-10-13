@@ -1,3 +1,4 @@
+/** Generic state machine for AI behaviors. */
 export interface State<TContext> {
   readonly name: string;
   enter(context: TContext): void;

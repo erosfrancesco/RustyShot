@@ -1,5 +1,6 @@
 import type { Scene } from '@babylonjs/core';
 
+/** Loads and instantiates GLB assets via Babylon AssetContainer. */
 export class AssetManager {
   private readonly containers = new Map<string, any>();
   private loaded = false;
@@ -7,7 +8,7 @@ export class AssetManager {
   constructor(private readonly scene: Scene) {}
 
   async loadAll(registry: Record<string, string>): Promise<void> {
-    if (this.loaded) {return;}
+    if (this.loaded) return;
 
     const entries = Object.entries(registry);
     for (const [name, url] of entries) {
@@ -30,7 +31,7 @@ export class AssetManager {
 
   instantiate(name: string): any {
     const container = this.containers.get(name);
-    if (!container) {return undefined;}
+    if (!container) return undefined;
     container.addAllToScene();
     return container;
   }

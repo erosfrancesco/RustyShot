@@ -3,6 +3,7 @@ import { HealthComponent } from '../components/HealthComponent';
 import { MovementComponent } from '../components/MovementComponent';
 import { CombatComponent } from '../components/CombatComponent';
 
+/** Configuration for a player entity. */
 export interface PlayerConfig {
   readonly health: number;
   readonly speed: number;
@@ -11,6 +12,7 @@ export interface PlayerConfig {
   readonly range: number;
 }
 
+/** Player entity with health, movement, and combat components. */
 export class Player extends Entity {
   constructor(config: PlayerConfig) {
     super('player', ['player']);

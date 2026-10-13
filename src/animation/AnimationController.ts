@@ -1,5 +1,6 @@
 import { AnimationGroup } from '@babylonjs/core';
 
+/** Manages named Babylon animation groups. */
 export class AnimationController {
   private readonly animations = new Map<string, AnimationGroup>();
 
@@ -11,13 +12,13 @@ export class AnimationController {
 
   play(name: string, loop = true): void {
     const animation = this.animations.get(name);
-    if (!animation) {return;}
+    if (!animation) return;
     animation.play(loop);
   }
 
   stop(name: string): void {
     const animation = this.animations.get(name);
-    if (!animation) {return;}
+    if (!animation) return;
     animation.stop();
   }
 

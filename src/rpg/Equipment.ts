@@ -1,5 +1,6 @@
-import type { ItemDefinition } from './Inventory';
+import { ItemDefinition } from './Inventory';
 
+/** Equipment slots and equipped item tracking. */
 export interface EquippedItem {
   readonly slot: 'weapon' | 'armor' | 'accessory';
   readonly item: ItemDefinition;
@@ -9,9 +10,9 @@ export class Equipment {
   private readonly equipped = new Map<string, EquippedItem>();
 
   equip(item: ItemDefinition, slot: 'weapon' | 'armor' | 'accessory'): boolean {
-    if (item.type === 'weapon' && slot !== 'weapon') {return false;}
-    if (item.type === 'armor' && slot !== 'armor') {return false;}
-    if (item.type === 'accessory' && slot !== 'accessory') {return false;}
+    if (item.type === 'weapon' && slot !== 'weapon') return false;
+    if (item.type === 'armor' && slot !== 'armor') return false;
+    if (item.type === 'accessory' && slot !== 'accessory') return false;
 
     this.equipped.set(`${slot}:${item.id}`, { slot, item });
     return true;

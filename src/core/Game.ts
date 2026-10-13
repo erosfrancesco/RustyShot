@@ -17,6 +17,7 @@ import { WeaponSystem } from '../combat/WeaponSystem';
 import { AnimationController } from '../animation/AnimationController';
 import { PlayerRPG } from '../rpg/PlayerRPG';
 
+/** Central game orchestrator: engine, scene, render loop, and subsystems. */
 export class Game {
   private readonly engine: Engine;
   private readonly scene: Scene;
@@ -89,7 +90,7 @@ export class Game {
   }
 
   start(): void {
-    if (this.running) {return;}
+    if (this.running) return;
     this.running = true;
     this.lastTime = performance.now();
     this.engine.runRenderLoop(() => {
@@ -170,7 +171,7 @@ export class Game {
   }
 
   private update(deltaTime: number): void {
-    if (this.state !== GameState.Playing) {return;}
+    if (this.state !== GameState.Playing) return;
     this.combatSystem.update(deltaTime);
     this.damageSystem.update(deltaTime);
     this.weaponSystem.update(deltaTime);
