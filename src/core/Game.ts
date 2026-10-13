@@ -48,11 +48,14 @@ export class Game {
     this.animationController = new AnimationController(this.scene);
     this.playerRPG = new PlayerRPG(this);
 
+    this.createScenes();
+    this.setupResize(canvas);
+  }
+
+  private createScenes(): void {
     this.scenes.set('main', new MainScene(this));
     this.scenes.set('asset-manager', new AssetManagerScene(this));
     this.scenes.set('test', new TestScene(this));
-
-    this.setupResize(canvas);
   }
 
   getEngine(): Engine {
@@ -110,6 +113,33 @@ export class Game {
       this.scenes.get('test')?.setup(),
     ]);
     await this.loadAssets();
+  }
+
+  /** Hot-reload scenes while preserving engine/canvas. */
+  async hotReload(): Promise<void> {
+    const wasRunning = this.running;
+    if (wasRunning) this.stop();
+
+    this.activeScene?.dispose();
+    this.scene.dispose();
+
+    // Recreate scene with same engine
+    const newScene = new Scene(this.engine);
+    Object.assign(this, { scene: newScene });
+    
+    // Recreate asset manager with new scene
+    const newAssetManager = new AssetManager(newScene);
+    Object.assign(this, { assetManager: newAssetManager });
+
+    // Recreate scenes
+    this.scenes.clear();
+    this.createScenes();
+    this.activeScene = null;
+    this.pendingScene = null;
+
+    await this.initialize();
+
+    if (wasRunning) this.start();
   }
 
   start(): void {
