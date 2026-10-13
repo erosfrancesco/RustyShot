@@ -7,14 +7,20 @@ import {
     HemisphericLight,
     DirectionalLight,
     Color4,
+    TransformNode,
 } from "@babylonjs/core"
 import { SceneSwitcher } from "../../ui/SceneSwitcher"
-import { attachSceneSwitcherToggle } from "../../utils/sceneSwitcherToggle"
+import { createSceneSwitcherToggle } from "../../utils/sceneSwitcherToggle"
+import { BookNookRegistry, nookVariants } from "../../book-nook"
 
 /** Asset manager editor scene for creating and previewing nook presets. */
 export class AssetManagerScene extends BaseScene {
     private sceneSwitcher?: SceneSwitcher
-    private disposeToggle?: () => void
+    private sceneSwitcherToggle?: ReturnType<typeof createSceneSwitcherToggle>
+    private nookRegistry?: BookNookRegistry
+    private previewRoot?: TransformNode
+    private currentVariantIndex = 0
+    private variantKeys = Object.keys(nookVariants) as Array<keyof typeof nookVariants>
 
     constructor(game: Game) {
         super(game)
@@ -63,14 +69,36 @@ export class AssetManagerScene extends BaseScene {
             this.scene,
         )
 
-        this.disposeToggle = attachSceneSwitcherToggle(
-            this.scene,
-            this.game,
-            () => this.sceneSwitcher,
-            (s) => { this.sceneSwitcher = s; }
-        )
+        this.previewRoot = new TransformNode("previewRoot", this.scene)
+        this.previewRoot.position.y = 0.3
+
+        this.nookRegistry = new BookNookRegistry(this.scene)
+        await this.loadCurrentVariant()
+
+        this.setupVariantCycling()
+
+        this.sceneSwitcherToggle = createSceneSwitcherToggle(this.scene, this.game)
 
         this.state = "ready"
+    }
+
+    private async loadCurrentVariant(): Promise<void> {
+        if (!this.nookRegistry || !this.previewRoot) return
+
+        this.nookRegistry.getAll().forEach(n => this.nookRegistry!.remove(n.config.id))
+
+        const variantKey = this.variantKeys[this.currentVariantIndex]
+        await this.nookRegistry.create(variantKey, Vector3.Zero(), "preview")
+    }
+
+    private setupVariantCycling(): void {
+        this.scene.onKeyboardObservable.add((kbInfo) => {
+            if (kbInfo.type === 1 && kbInfo.event.key === "n") {
+                this.currentVariantIndex = (this.currentVariantIndex + 1) % this.variantKeys.length
+                this.loadCurrentVariant()
+                console.log(`Switched to variant: ${this.variantKeys[this.currentVariantIndex]}`)
+            }
+        })
     }
 
     private generateGridPoints(size: number, step: number): Vector3[] {
@@ -91,11 +119,16 @@ export class AssetManagerScene extends BaseScene {
     onEnter(): void {
         super.onEnter()
         this.scene.clearColor = new Color4(0.1, 0.1, 0.1, 1.0)
+        this.sceneSwitcherToggle?.createSwitcher((s) => { this.sceneSwitcher = s; })
     }
 
     onExit(): void {
         super.onExit()
-        this.disposeToggle?.()
-        this.disposeToggle = undefined
+        this.sceneSwitcherToggle?.disposeSwitcher(() => this.sceneSwitcher)
+        this.sceneSwitcher = undefined
+        this.nookRegistry?.dispose()
+        this.nookRegistry = undefined
+        this.previewRoot?.dispose()
+        this.previewRoot = undefined
     }
 }

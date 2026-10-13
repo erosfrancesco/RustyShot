@@ -8,17 +8,17 @@ import {
     PointLight,
     Color3,
     Color4,
-    TransformNode,
 } from "@babylonjs/core"
 import { GameEvents } from "../../core/Events"
 import { SceneSwitcher } from "../../ui/SceneSwitcher"
-import { attachSceneSwitcherToggle } from "../../utils/sceneSwitcherToggle"
+import { createSceneSwitcherToggle } from "../../utils/sceneSwitcherToggle"
+import { BookNookRegistry, nookVariants } from "../../book-nook"
 
-/** Main nook viewer scene. */
+/** Main nook viewer scene - demonstrates multiple nook variations. */
 export class MainScene extends BaseScene {
-    private nookRoot?: TransformNode
+    private nookRegistry?: BookNookRegistry
     private sceneSwitcher?: SceneSwitcher
-    private disposeToggle?: () => void
+    private sceneSwitcherToggle?: ReturnType<typeof createSceneSwitcherToggle>
 
     constructor(game: Game) {
         super(game)
@@ -59,14 +59,25 @@ export class MainScene extends BaseScene {
             // React to game state changes if needed
         })
 
-        this.disposeToggle = attachSceneSwitcherToggle(
-            this.scene,
-            this.game,
-            () => this.sceneSwitcher,
-            (s) => { this.sceneSwitcher = s; }
-        )
+        this.nookRegistry = new BookNookRegistry(this.scene)
+        await this.createNookDisplay()
+
+        this.sceneSwitcherToggle = createSceneSwitcherToggle(this.scene, this.game)
 
         this.state = "ready"
+    }
+
+    private async createNookDisplay(): Promise<void> {
+        if (!this.nookRegistry) return
+
+        const variants = Object.keys(nookVariants) as Array<keyof typeof nookVariants>
+        const spacing = 2.5
+
+        for (let i = 0; i < variants.length; i++) {
+            const variant = variants[i]
+            const x = (i - (variants.length - 1) / 2) * spacing
+            await this.nookRegistry.create(variant, new Vector3(x, 0, 0), variant)
+        }
     }
 
     update(_deltaTime: number): void {
@@ -76,15 +87,14 @@ export class MainScene extends BaseScene {
     onEnter(): void {
         super.onEnter()
         this.scene.clearColor = new Color4(0.02, 0.02, 0.03, 1.0)
+        this.sceneSwitcherToggle?.createSwitcher((s: SceneSwitcher) => { this.sceneSwitcher = s; })
     }
 
     onExit(): void {
         super.onExit()
-        this.disposeToggle?.()
-        this.disposeToggle = undefined
-        if (this.nookRoot) {
-            this.nookRoot.dispose()
-            this.nookRoot = undefined
-        }
+        this.sceneSwitcherToggle?.disposeSwitcher(() => this.sceneSwitcher)
+        this.sceneSwitcher = undefined
+        this.nookRegistry?.dispose()
+        this.nookRegistry = undefined
     }
 }

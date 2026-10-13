@@ -1,5 +1,7 @@
 import './style.css';
 import { Game } from './core/Game';
+// Register GLTF/GLB loader plugin
+import '@babylonjs/loaders/glTF';
 
 const canvas = document.createElement('canvas');
 let game: Game;
